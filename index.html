@@ -35,18 +35,13 @@
         .product-name { font-size: 15px; font-weight: 700; color: #1c1c1e; margin-bottom: 5px; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
 
         .action-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; width: 100%; }
-        .btn-action { border: none; cursor: pointer; transition: 0.2s; text-transform: uppercase; border-radius: 12px; font-weight: 800; }
-        .btn-buy { background: #ee4d2d; color: white !important; box-shadow: 0 4px 12px rgba(238, 77, 45, 0.2); }
-        .btn-action.copied { background: #34c759 !important; }
+        .btn-action { border: none; cursor: pointer; transition: 0.2s; text-transform: uppercase; border-radius: 16px; font-weight: 800; white-space: nowrap; }
+        .btn-buy { flex: 2; background: linear-gradient(135deg, #ff5f23, #ee3524); color: white !important; box-shadow: 0 10px 25px rgba(238, 77, 45, 0.25); padding: 16px 22px; font-size: 16px; min-height: 58px; display: flex; align-items: center; justify-content: center; }
+        .btn-copy { flex: 1; background: #ffffff; color: #1c1c1e; border: 1px solid #e9e9ef; padding: 14px 16px; font-size: 14px; min-height: 58px; }
+        .btn-copy:hover { background: #f8f8fb; }
+        .btn-action.copied { background: #34c759 !important; color: white !important; }
 
-        .action-row .btn-action { 
-            flex: 1; 
-            padding: 12px 2px; 
-            font-size: clamp(8px, 2.8vw, 11px); 
-            white-space: nowrap; 
-            overflow: hidden;
-            letter-spacing: -0.2px;
-        }
+        .action-note { margin-top: 12px; font-size: 14px; color: #bf2d1f; background: #fff3f1; border: 1px solid #ffdbd6; border-radius: 14px; padding: 12px 14px; font-weight: 800; line-height: 1.4; }
         .action-row .voucher-img { flex: 2; border-radius: 8px; border: 1px solid #eee; height: auto; max-height: 55px; object-fit: cover; }
 
         .contact-section { width: 100%; max-width: 500px; margin-top: 30px; text-align: center; }
@@ -133,19 +128,15 @@
                                 <img src="${item.imageUrl || 'logo.png'}" class="product-img">
                                 <div class="product-info">
                                     <div class="product-name">${item.productName}</div>
-                                    <div style="font-size:13px; color:#34c759; font-weight:600;">✅ Sẵn sàng áp mã giảm giá</div>
+                                    <div class="action-note">Nhấn Mua ngay để tự động áp mã 22%, không cần nhấn COPY link nữa.</div>
                                 </div>
                             </div>
                             <div style="background:#fff5f2; padding:12px; border-radius:12px; border:1px solid #ffebe6; margin-top:10px;">
                                 <div class="action-row">
-                                    <button class="btn-action btn-buy" onclick="copyToClipboard('${item.short}', this)">🔗 SAO CHÉP LINK</button>
-                                </div>  
-
-                               
+                                    <a href="${item.short}" target="_blank" class="btn-action btn-buy">🛒 MUA NGAY</a>
+                                    <button class="btn-action btn-copy" onclick="copyToClipboard('${item.short}', this)">🔗 COPY</button>
+                                </div>
                             </div>`;
-                                                   
-                                                
-
                         list.appendChild(div);
                     });
                 }
@@ -179,20 +170,8 @@
         }
 
     </script>
-                    <!-- <div class="instruction-box">
-            <h3>📌Hướng dẫn áp mã:</h3>
-            <div class="instruction-step">
-                • <b>Bước 1:</b> Copy link sản phẩm từ Shopee => Dán link sản phẩm vào ô phía trên => Nhấn “Chuyển đổi ngay”
-            </div>
-            <div class="instruction-step">
-                • <b>Bước 2:</b> Nhấn "Copy link" vừa chuyển đổi được rồi bình luận dưới post này <a href="https://www.facebook.com/share/p/17rpeBvZb4/" target="_blank" style="color: #007bff; text-decoration: none;">https://www.facebook.com/share/p/17rpeBvZb4/</a> và mua trực tiếp tại link để áp mã nha
-            </div>
-        </div> -->
+  
 
-        <div class="contact-section">
-            <h3>Liên hệ & Trợ giúp</h3>
-            <a href="https://zalo.me/g/hngoox923" target="_blank" class="btn-zalo">💬 Nhóm Zalo thông báo mã giảm giá</a>
-            <a href="https://zalo.me/84333827185" target="_blank" class="btn-zalo btn-help">🆘 Trợ giúp</a>
-        </div>
+ 
 </body>
 </html>

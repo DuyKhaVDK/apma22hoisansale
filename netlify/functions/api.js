@@ -16,8 +16,13 @@ const DB_ROOT = process.env.DB_ROOT;
 const APP_ID = process.env.APP_ID;     
 const APP_SECRET = process.env.APP_SECRET;
 const ADMIN_SECRET = process.env.ADMIN_SECRET; 
-const AFF_ID = process.env.AFF_ID || "17318770053"; 
+const AFF_ID = process.env.AFF_ID || "17318770053";
+const AFFIPAD_API_KEY = process.env.AFFIPAD_API_KEY;
+const AFFIPAD_BASE_URL = 'https://api.affipad.com';
+const REQUIRED_SUB_ID = 'DK';
 const SHOPEE_API_URL = 'https://open-api.affiliate.shopee.vn/graphql';
+
+let AFFIPAD_TOOL_ID = process.env.AFFIPAD_TOOL_ID || null;
 
 
 async function resolveAndProcessUrl(inputUrl) {
@@ -61,10 +66,69 @@ async function getShopeeProductInfo(itemId) {
     } catch (e) { return null; }
 }
 
-// --- HÀM 3: TẠO LINK CHUẨN (UNIVERSAL REDIR) ---
+// --- HÀM 3: LẤY DANH SÁCH TOOLS TỪ AFFIPAD ---
+async function getAffipadTools() {
+    if (!AFFIPAD_API_KEY) {
+        console.log('⚠️ AFFIPAD_API_KEY chưa được cấu hình');
+        return null;
+    }
+    try {
+        const response = await axios.get(`${AFFIPAD_BASE_URL}/v1/tools`, {
+            headers: {
+                'Authorization': `Bearer ${AFFIPAD_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            timeout: 8000
+        });
+        if (response.data.success && response.data.data.tools.length > 0) {
+            const firstTool = response.data.data.tools[0];
+            console.log(`✅ AffiPad Tool: ${firstTool.name} (${firstTool.id})`);
+            return firstTool.id;
+        }
+    } catch (e) {
+        console.error('❌ Lỗi lấy AffiPad tools:', e.message);
+    }
+    return null;
+}
+
+// --- HÀM 4: CHUYỂN ĐỔI LINK VIA AFFIPAD ---
+async function convertViaAffipad(originalUrl, subIds = []) {
+    if (!AFFIPAD_API_KEY || !AFFIPAD_TOOL_ID) {
+        console.log('⚠️ AffiPad không cấu hình đủ, dùng fallback...');
+        return generateUniversalLink(originalUrl, subIds);
+    }
+    try {
+        const response = await axios.post(
+            `${AFFIPAD_BASE_URL}/v1/fb-convert`,
+            {
+                url: originalUrl,
+                toolId: AFFIPAD_TOOL_ID,
+                useShortLink: true,
+                subIds: subIds.length > 0 ? subIds : [REQUIRED_SUB_ID]
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${AFFIPAD_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                timeout: 10000
+            }
+        );
+        if (response.data.success && response.data.data.results.length > 0) {
+            const result = response.data.data.results[0];
+            console.log(`✅ AffiPad convert OK: ${result.shortUrl || result.link}`);
+            return result.shortUrl || result.link;
+        }
+    } catch (e) {
+        console.error('❌ AffiPad convert error:', e.response?.data?.message || e.message);
+    }
+    return generateUniversalLink(originalUrl, subIds);
+}
+
+// --- HÀM 5: TẠO LINK CHUẨN (UNIVERSAL REDIR) ---
 function generateUniversalLink(originalUrl, subIds = []) {
     const encodedUrl = encodeURIComponent(originalUrl);
-    let finalSubId = subIds.length > 0 ? subIds.join('-') : "DK";
+    let finalSubId = subIds.length > 0 ? subIds.join('-') : REQUIRED_SUB_ID;
     return `https://s.shopee.vn/an_redir?origin_link=${encodedUrl}&affiliate_id=${AFF_ID}&sub_id=${finalSubId}`;
 }
 
@@ -77,10 +141,15 @@ router.post('/convert-text', async (req, res) => {
 
     if (uniqueLinks.length === 0) return res.json({ success: false, converted: 0 });
 
+    // Lần đầu: lấy tool ID từ AffiPad nếu chưa có
+    if (!AFFIPAD_TOOL_ID && AFFIPAD_API_KEY) {
+        AFFIPAD_TOOL_ID = await getAffipadTools();
+    }
+
     const conversions = await Promise.all(uniqueLinks.map(async (url) => {
         const { cleanedUrl, itemId } = await resolveAndProcessUrl(url.startsWith('http') ? url : `https://${url}`);
         const [short, info] = await Promise.all([
-            Promise.resolve(generateUniversalLink(cleanedUrl, subIds)),
+            convertViaAffipad(cleanedUrl, subIds || [REQUIRED_SUB_ID]),
             getShopeeProductInfo(itemId)
         ]);
         return { original: url, short, productName: info?.productName || "Sản phẩm Shopee", imageUrl: info?.imageUrl || "" };

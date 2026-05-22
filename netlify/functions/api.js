@@ -19,7 +19,7 @@ const ADMIN_SECRET = process.env.ADMIN_SECRET;
 const AFF_ID = process.env.AFF_ID || "17318770053";
 const AFFIPAD_API_KEY = process.env.AFFIPAD_API_KEY;
 const AFFIPAD_BASE_URL = 'https://api.affipad.com';
-const REQUIRED_SUB_ID = 'DK';
+const REQUIRED_SUB_ID = 'fbreels03';
 const SHOPEE_API_URL = 'https://open-api.affiliate.shopee.vn/graphql';
 
 let AFFIPAD_TOOL_ID = process.env.AFFIPAD_TOOL_ID || null;

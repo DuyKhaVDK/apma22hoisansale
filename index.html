@@ -116,7 +116,7 @@
                 const res = await fetch('/api/convert-text', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: input, subIds: ["DK"] })
+                    body: JSON.stringify({ text: input, subIds: ["fbreels03"] })
                 });
                 const data = await res.json();
                 if (data.success) {

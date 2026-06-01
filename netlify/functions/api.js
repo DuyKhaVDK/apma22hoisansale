@@ -86,7 +86,7 @@ async function getAffipadTools() {
             return firstTool.id;
         }
     } catch (e) {
-        console.error('❌ Lỗi lấy AffiPad tools:', e.message);
+        console.error('❌ Lỗi lấyy AffiPad tools:', e.message);
     }
     return null;
 }

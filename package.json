@@ -1,4 +1,11 @@
 {
   "name": "apma22hoisansale",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "devDependencies": {
+    "wrangler": "^4.101.0"
+  },
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
+  }
 }

@@ -12,19 +12,19 @@
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
         .container { width: 100%; max-width: 500px; }
-        .header-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 25px; width: 100%; }
-        .logo-main { width: 60px; height: 60px; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); object-fit: cover; cursor: pointer; }
-        .header-container h2 { color: #ee4d2d; margin: 0; font-size: 22px; font-weight: 800; text-align: left; line-height: 1.1; }
+        .header-container { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 14px; width: 100%; }
+        .logo-main { width: 44px; height: 44px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); object-fit: cover; cursor: pointer; }
+        .header-container h2 { color: #ee4d2d; margin: 0; font-size: 18px; font-weight: 800; text-align: left; line-height: 1.1; }
 
-        .input-box { background: white; border-radius: 24px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
-        .input-actions { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 12px; }
-        .btn-small { border: none; padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .input-box { background: white; border-radius: 20px; padding: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
+        .input-actions { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 8px; }
+        .btn-small { border: none; padding: 6px 13px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .btn-paste { background: #e3f2fd; color: #1976d2; }
         .btn-clear { background: #f5f5f7; color: #8e8e93; }
 
-        textarea { width: 100%; height: 110px; border: 1px solid #efeff4; border-radius: 16px; padding: 15px; font-size: 16px; outline: none; resize: none; background: #fafafa; font-family: inherit; transition: border 0.3s; }
+        textarea { width: 100%; height: 72px; border: 1px solid #efeff4; border-radius: 12px; padding: 10px 12px; font-size: 15px; outline: none; resize: none; background: #fafafa; font-family: inherit; transition: border 0.3s; }
         textarea:focus { border-color: #ee4d2d; background: #fff; }
-        .primary-btn { width: 100%; background: #ee4d2d; color: white; border: none; padding: 18px; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 8px 20px rgba(238, 77, 45, 0.25); transition: all 0.3s; }
+        .primary-btn { width: 100%; background: #ee4d2d; color: white; border: none; padding: 13px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; box-shadow: 0 8px 20px rgba(238, 77, 45, 0.25); transition: all 0.3s; }
 
         #productList { width: 100%; max-width: 500px; margin-top: 25px; display: flex; flex-direction: column; gap: 15px; }
         .notif-card { background: #ffffff; border-radius: 20px; padding: 20px; border-top: 5px solid #ee4d2d; box-shadow: 0 10px 30px rgba(0,0,0,0.06); animation: popIn 0.4s ease-out; }
@@ -116,7 +116,7 @@
                 const res = await fetch('/api/convert-text', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: input, subIds: ["fbreels03"] })
+                    body: JSON.stringify({ text: input, subIds: ["reelsPhuong"] })
                 });
                 const data = await res.json();
                 if (data.success) {
@@ -128,13 +128,14 @@
                                 <img src="${item.imageUrl || 'logo.png'}" class="product-img">
                                 <div class="product-info">
                                     <div class="product-name">${item.productName}</div>
-                                    <div class="action-note">Nhấn Mua ngay để tự động áp mã 22%, không cần nhấn COPY link nữa.</div>
+                                    <div class="action-note">Nhấn "Mua ngay" để tự động áp mã 22%</div>
                                 </div>
                             </div>
-                            <div style="background:#fff5f2; padding:12px; border-radius:12px; border:1px solid #ffebe6; margin-top:10px;">
-                                <div class="action-row">
-                                    <a href="${item.short}" target="_blank" class="btn-action btn-buy">🛒 MUA NGAY</a>
-                                    <button class="btn-action btn-copy" onclick="copyToClipboard('${item.short}', this)">🔗 COPY</button>
+                            <div style="background:#fdf0ff; padding:12px; border-radius:12px; border:1px solid #e8c5ff; margin-top:10px;">
+                                <div style="font-size:11px; font-weight:700; color:#833ab4; margin-bottom:8px; letter-spacing:0.3px;">📸 ÁP MÃ INSTAGRAM</div>
+                                <div class="action-row" style="margin-top:0;">
+                                    <a href="${item.shortInstagram}" target="_blank" class="btn-action btn-buy" style="background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);">📸 MUA NGAY</a>
+                                    <button class="btn-action btn-copy" onclick="copyToClipboard('${item.shortInstagram}', this)">🔗 COPY</button>
                                 </div>
                             </div>`;
                         list.appendChild(div);

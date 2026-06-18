@@ -16,10 +16,10 @@ const DB_ROOT = process.env.DB_ROOT;
 const APP_ID = process.env.APP_ID;     
 const APP_SECRET = process.env.APP_SECRET;
 const ADMIN_SECRET = process.env.ADMIN_SECRET; 
-const AFF_ID = process.env.AFF_ID || "17340750539";
+const AFF_ID = process.env.AFF_ID || "17318740425";
 const AFFIPAD_API_KEY = process.env.AFFIPAD_API_KEY;
 const AFFIPAD_BASE_URL = 'https://api.affipad.com';
-const REQUIRED_SUB_ID = 'fbreels03';
+const REQUIRED_SUB_ID = 'reelsPhuong';
 const SHOPEE_API_URL = 'https://open-api.affiliate.shopee.vn/graphql';
 
 let AFFIPAD_TOOL_ID = process.env.AFFIPAD_TOOL_ID || null;
@@ -126,10 +126,10 @@ async function convertViaAffipad(originalUrl, subIds = []) {
 }
 
 // --- HÀM 5: TẠO LINK CHUẨN (UNIVERSAL REDIR) ---
-function generateUniversalLink(originalUrl, subIds = []) {
+function generateUniversalLink(originalUrl, subIds = [], affId = AFF_ID) {
     const encodedUrl = encodeURIComponent(originalUrl);
     let finalSubId = subIds.length > 0 ? subIds.join('-') : REQUIRED_SUB_ID;
-    return `https://s.shopee.vn/an_redir?origin_link=${encodedUrl}&affiliate_id=${AFF_ID}&sub_id=${finalSubId}`;
+    return `https://s.shopee.vn/an_redir?origin_link=${encodedUrl}&affiliate_id=${affId}&sub_id=${finalSubId}`;
 }
 
 // --- ROUTER CHÍNH: CHUYỂN ĐỔI & ĐẾM LƯỢT ---
@@ -152,7 +152,7 @@ router.post('/convert-text', async (req, res) => {
             convertViaAffipad(cleanedUrl, subIds || [REQUIRED_SUB_ID]),
             getShopeeProductInfo(itemId)
         ]);
-        return { original: url, short, productName: info?.productName || "Sản phẩm Shopee", imageUrl: info?.imageUrl || "" };
+        return { original: url, short, shortInstagram: generateUniversalLink(cleanedUrl, ["instagram"], "17318740425"), productName: info?.productName || "Sản phẩm Shopee", imageUrl: info?.imageUrl || "" };
     }));
 
    
